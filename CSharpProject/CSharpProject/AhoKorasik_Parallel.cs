@@ -7,10 +7,12 @@ using System.Threading.Tasks;
 
 namespace CSharpProject
 {
-    partial class AhoKorasik_Parallel
+    partial class AhoKorasik_Parallel : IAhoKorasik
     {
         private Node_Parallel root;
         private List<char> alphabet;
+
+        public bool IsPreparable { get; private set; }
 
         private int maxWordLength;
 
@@ -19,6 +21,7 @@ namespace CSharpProject
             root = new Node_Parallel();
             this.alphabet = alphabet;
             maxWordLength = 0;
+            IsPreparable = alphabet != null;
         }
 
         #region adding
@@ -85,8 +88,8 @@ namespace CSharpProject
                 }
 
                 // prepering suffix transitions
-                // foreach (char letter in alphabet)
-                Parallel.ForEach(alphabet, (char letter) =>
+                foreach (char letter in alphabet)
+                //Parallel.ForEach(alphabet, (char letter) =>
                 {
                     //Console.WriteLine("ForEach    " + Thread.CurrentThread.ManagedThreadId);
 
@@ -102,7 +105,7 @@ namespace CSharpProject
                     {
                         current.Transitions[letter] = current.SuffLink.Transitions[letter];
                     }
-                });
+                };//);
             });
         }
 
@@ -122,7 +125,7 @@ namespace CSharpProject
 
         public void PrepareTransitions()
         {
-            if (alphabet != null)
+            if (IsPreparable)
             {
                 List<Node_Parallel> layer = new List<Node_Parallel>() { root };
 
@@ -164,8 +167,9 @@ namespace CSharpProject
         }
 
         // almost same as IsOneOfStringsInText_Prepared
-        public bool IsOneOfStringsInText(string text, int maxThreadNumber = 3)
+        public bool IsOneOfStringsInText(string text)
         {
+            int maxThreadNumber = 3;
             int possibleFullParts = (int)Math.Ceiling((double)text.Length / maxWordLength);
 
             if (possibleFullParts >= 3)
@@ -224,8 +228,9 @@ namespace CSharpProject
         }
 
         // almost same as IsOneOfStringsInText
-        public bool IsOneOfStringsInText_Prepared(string text, int maxThreadNumber = 3)
+        public bool IsOneOfStringsInText_Prepared(string text)
         {
+            int maxThreadNumber = 3;
             int possibleFullParts = (int)Math.Ceiling((double)text.Length / maxWordLength);
 
             if (possibleFullParts >= 3)

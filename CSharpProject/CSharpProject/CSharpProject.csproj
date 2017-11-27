@@ -65,6 +65,7 @@
   <ItemGroup>
     <Compile Include="AhoKorasik.cs" />
     <Compile Include="AhoKorasik_Parallel.cs" />
+    <Compile Include="IAhoKorasik.cs" />
     <Compile Include="Node.cs" />
     <Compile Include="Node_Parallel.cs" />
     <Compile Include="Program.cs" />

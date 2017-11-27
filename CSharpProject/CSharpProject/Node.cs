@@ -24,6 +24,7 @@ namespace CSharpProject
                 Transitions = new Dictionary<char, Node>();
                 IsTerminal = false;
                 SuffLink = null;
+                PressedSuffixLink = null;
                 Parent = parent;
                 CharToParent = charToParent;
             }

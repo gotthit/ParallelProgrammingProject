@@ -27,6 +27,7 @@ namespace CSharpProject
                 Transitions = new ConcurrentDictionary<char, Node_Parallel>();
                 IsTerminal = false;
                 SuffLink = null;
+                PressedSuffixLink = null;
                 Parent = parent;
                 CharToParent = charToParent;
 

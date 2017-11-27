@@ -1,0 +1,138 @@
+
+
+ alpabetSize: 10  |  textSize: 10000  |  wordsSize: 100  | wordCount: 10 
+ ----------- 
+
+ NOT prepapable NOT parallel 
+ ----------- 
+ addtime: 0,000414736666666667      findtime: 0,00133315666666667  
+ ----------- 
+ prepapable NOT parallel 
+ ----------- 
+ addtime: 0,000422583333333333     preparetime: 0,00312976666666667     findtime: 0,00071425  
+ ----------- 
+ NOT prepapable parallel 
+ ----------- 
+ addtime: 0,00224735333333333        findtime: 0,00475751666666667  
+ ----------- 
+ prepapable parallel 
+ ----------- 
+ addtime: 0,00156715333333333     preparetime: 0,01967154     findtime: 0,000586656666666667  
+ ----------- 
+
+
+ alpabetSize: 10  |  textSize: 10000  |  wordsSize: 100  | wordCount: 100 
+ ----------- 
+
+ NOT prepapable NOT parallel 
+ ----------- 
+ addtime: 0,00821596666666667      findtime: 0,00206603  
+ ----------- 
+ prepapable NOT parallel 
+ ----------- 
+ addtime: 0,00499831     preparetime: 0,0822292233333333     findtime: 0,00100587666666667  
+ ----------- 
+ NOT prepapable parallel 
+ ----------- 
+ addtime: 0,08401829        findtime: 0,00354712333333333  
+ ----------- 
+ prepapable parallel 
+ ----------- 
+ addtime: 0,0867270566666667     preparetime: 0,25689002     findtime: 0,000902453333333333  
+ ----------- 
+
+
+ alpabetSize: 10  |  textSize: 10000  |  wordsSize: 100  | wordCount: 1000 
+ ----------- 
+
+ NOT prepapable NOT parallel 
+ ----------- 
+ addtime: 0,202904583333333      findtime: 0,00764067666666667  
+ ----------- 
+ prepapable NOT parallel 
+ ----------- 
+ addtime: 0,18888927     preparetime: 1,08160011333333     findtime: 0,00258313666666667  
+ ----------- 
+ NOT prepapable parallel 
+ ----------- 
+ addtime: 1,06919039        findtime: 0,00967884333333333  
+ ----------- 
+ prepapable parallel 
+ ----------- 
+ addtime: 1,72592958     preparetime: 3,59322544     findtime: 0,00233066  
+ ----------- 
+
+
+ alpabetSize: 10  |  textSize: 10000  |  wordsSize: 1000  | wordCount: 10 
+ ----------- 
+
+ NOT prepapable NOT parallel 
+ ----------- 
+ addtime: 0,00850585666666667      findtime: 0,00128845  
+ ----------- 
+ prepapable NOT parallel 
+ ----------- 
+ addtime: 0,00482538333333333     preparetime: 0,09333553     findtime: 0,000691206666666667  
+ ----------- 
+ NOT prepapable parallel 
+ ----------- 
+ addtime: 0,0811193066666666        findtime: 0,00544095  
+ ----------- 
+ prepapable parallel 
+ ----------- 
+ addtime: 0,111184823333333     preparetime: 0,368294623333333     findtime: 0,00070415  
+ ----------- 
+
+
+ alpabetSize: 10  |  textSize: 10000  |  wordsSize: 1000  | wordCount: 100 
+ ----------- 
+
+ NOT prepapable NOT parallel 
+ ----------- 
+ addtime: 0,248701323333333      findtime: 0,00244895666666667  
+ ----------- 
+ prepapable NOT parallel 
+ ----------- 
+ addtime: 0,24420271     preparetime: 1,15109278333333     findtime: 0,00100790666666667  
+ ----------- 
+ NOT prepapable parallel 
+ ----------- 
+ addtime: 1,76092675        findtime: 0,00510438  
+ ----------- 
+ prepapable parallel 
+ ----------- 
+ addtime: 1,81016440333333     preparetime: 3,62721289     findtime: 0,000945463333333333  
+ ----------- 
+
+
+ alpabetSize: 10  |  textSize: 10000  |  wordsSize: 1000  | wordCount: 1000 
+ ----------- 
+
+ NOT prepapable NOT parallel 
+ ----------- 
+ addtime: 2,97355426666667      findtime: 0,00915113333333333  
+ ----------- 
+ prepapable NOT parallel 
+ ----------- 
+ addtime: 3,10895917     preparetime: 12,4279742766667     findtime: 0,00288129333333333  
+ ----------- 
+ NOT prepapable parallel 
+ ----------- 
+ addtime: 13,90139684        findtime: 0,00977817666666667  
+ ----------- 
+ prepapable parallel 
+ ----------- 
+ addtime: 13,74847901     preparetime: 32,7661533366667     findtime: 0,00266846333333333  
+ ----------- 
+
+
+ alpabetSize: 10  |  textSize: 10000  |  wordsSize: 10000  | wordCount: 10 
+ ----------- 
+
+ NOT prepapable NOT parallel 
+ ----------- 
+ addtime: 0,222679433333333      findtime: 0,00130397333333333  
+ ----------- 
+ prepapable NOT parallel 
+ ----------- 
+ addtime: 0,2472087

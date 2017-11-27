@@ -6,15 +6,17 @@ using System.Threading.Tasks;
 
 namespace CSharpProject
 {
-    partial class AhoKorasik
+    partial class AhoKorasik : IAhoKorasik
     {
         private Node root;
         private List<char> alphabet;
+        public bool IsPreparable { get; private set; }
 
         public AhoKorasik(List<char> alphabet = null)
         {
             root = new Node();
             this.alphabet = alphabet;
+            IsPreparable = alphabet != null;
         }
 
         public void AddString(string str)
@@ -42,7 +44,7 @@ namespace CSharpProject
 
         public void PrepareTransitions()
         {
-            if (alphabet != null)
+            if (IsPreparable)
             {
                 Queue<Node> queue = new Queue<Node>();
                 queue.Enqueue(root);
