@@ -144,52 +144,41 @@ namespace CSharpProject
 
         static void Main(string[] args)
         {
-            //ThreadPool.SetMaxThreads(3, 3);
-
             const int testNumber = 1;
 
-            //using (StreamWriter writer = new StreamWriter(@"..\..\..\CSharpTestResults.txt", true))
+            for (int alpabetSize = 26; alpabetSize < 1000; alpabetSize *= 10)
             {
-                for (int alpabetSize = 26; alpabetSize < 1000; alpabetSize *= 10)
+                for (int textLength = 1000000; textLength <= 100000000; textLength *= 10)
                 {
-                    for (int textLength = 1000000; textLength <= 100000000; textLength *= 10)
+                    for (int wordsLength = 50; wordsLength <= textLength; wordsLength *= 10)
                     {
-                        for (int wordsLength = 50; wordsLength <= textLength; wordsLength *= 10)
+                        for (int wordCount = 10000; (wordsLength * wordCount) <= 1000000; wordCount *= 10)
                         {
-                            for (int wordCount = 10000; (wordsLength * wordCount) <= 1000000; wordCount *= 10)
+                            Console.WriteLine();
+                            Console.WriteLine(" ----------- ");
+                            Console.WriteLine($"             alpabetSize: {alpabetSize}  |  textSize: {textLength}  |  wordsSize: {wordsLength}  | wordCount: {wordCount} ");
+                            Console.WriteLine(" ----------- ");
+
+                            List<List<string>> words;
+                            List<string> textes;
+
+                            PrepareDataForTests(testNumber, alpabetSize, textLength, wordsLength, wordCount, out words, out textes);
+
+                            List<bool> simpleAnswers = Test(false, null, textes, words);
+
+                            List<bool> praparableAnswers = Test(false, GetAlphabet(alpabetSize), textes, words);
+
+                            List<bool> parallelAnswers = Test(true, null, textes, words);
+
+                            List<bool> parallelPreparableAnswers = Test(true, GetAlphabet(alpabetSize), textes, words);
+
+                            if (!CheckIfAnswersSame(testNumber, simpleAnswers, praparableAnswers, parallelAnswers, parallelPreparableAnswers))
                             {
-                                //writer.WriteLine();
-                                //writer.WriteLine();
-                                //writer.WriteLine($" alpabetSize: {alpabetSize}  |  textSize: {textSize}  |  wordsSize: {wordsSize}  | wordCount: {wordCount} ");
-                                //writer.WriteLine(" ----------- ");
-                                //writer.WriteLine();
-
-                                Console.WriteLine();
-                                Console.WriteLine(" ----------- ");
-                                Console.WriteLine($"             alpabetSize: {alpabetSize}  |  textSize: {textLength}  |  wordsSize: {wordsLength}  | wordCount: {wordCount} ");
-                                Console.WriteLine(" ----------- ");
-
-                                List<List<string>>  words;
-                                List<string> textes;
-
-                                PrepareDataForTests(testNumber, alpabetSize, textLength, wordsLength, wordCount, out words, out textes);
-
-                                List<bool> simpleAnswers = Test(false, null, textes, words);
-
-                                List<bool> praparableAnswers = Test(false, GetAlphabet(alpabetSize), textes, words);
-
-                                List<bool> parallelAnswers = Test(true, null, textes, words);
-
-                                List<bool> parallelPreparableAnswers = Test(true, GetAlphabet(alpabetSize), textes, words);
-
-                                if (!CheckIfAnswersSame(testNumber, simpleAnswers, praparableAnswers, parallelAnswers, parallelPreparableAnswers))
-                                {
-                                    Console.WriteLine("!!!!!!!    Mistake found     !!!!!!!!!");
-                                }
-
-                                Console.ReadKey();
-                                return;
+                                Console.WriteLine("!!!!!!!    Mistake found     !!!!!!!!!");
                             }
+
+                            Console.ReadKey();
+                            return;
                         }
                     }
                 }
