@@ -16,7 +16,7 @@ namespace CSharpProject
         {
             root = new Node();
             this.alphabet = alphabet;
-            IsPreparable = alphabet != null;
+            IsPreparable = alphabet != null && alphabet.Count != 0;
         }
 
         public void AddString(string str)

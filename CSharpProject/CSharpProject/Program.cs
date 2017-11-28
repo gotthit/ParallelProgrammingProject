@@ -11,7 +11,7 @@ namespace CSharpProject
 {
     class Program
     {
-        public static Random random = new Random(42);
+        public static Random random = new Random();
 
         public static string GenerateRandomString(int length, int upperCharIndex)
         {
@@ -59,7 +59,7 @@ namespace CSharpProject
             return count != 0 ? sum / count : 0;
         }
 
-        public static List<bool> Test(IAhoKorasik korasik, List<string> textes, List<List<string>> words)
+        public static List<bool> Test(bool parallel, List<char> alphabet, List<string> textes, List<List<string>> words) 
         {
             double averageAddTime = 0;
             double averagePrepareTime = 0;
@@ -75,6 +75,16 @@ namespace CSharpProject
             for (int i = 0; i < textes.Count; ++i)
             {
                 GC.Collect();
+
+                IAhoKorasik korasik;
+                if (parallel)
+                {
+                    korasik = new AhoKorasik_Parallel(alphabet);
+                }
+                else
+                {
+                    korasik = new AhoKorasik(alphabet);
+                }
 
                 Stopwatch timer = new Stopwatch();
                 timer.Start();
@@ -140,13 +150,13 @@ namespace CSharpProject
 
             //using (StreamWriter writer = new StreamWriter(@"..\..\..\CSharpTestResults.txt", true))
             {
-                for (int alpabetSize = 50; alpabetSize < 1000; alpabetSize *= 10)
+                for (int alpabetSize = 26; alpabetSize < 1000; alpabetSize *= 10)
                 {
-                    for (int textLength = 1000000; textLength <= 10000000; textLength *= 10)
+                    for (int textLength = 1000000; textLength <= 100000000; textLength *= 10)
                     {
-                        for (int wordsLength = 10000; wordsLength <= textLength; wordsLength *= 10)
+                        for (int wordsLength = 50; wordsLength <= textLength; wordsLength *= 10)
                         {
-                            for (int wordCount = 100; (wordsLength * wordCount) <= 1000000; wordCount *= 10)
+                            for (int wordCount = 10000; (wordsLength * wordCount) <= 1000000; wordCount *= 10)
                             {
                                 //writer.WriteLine();
                                 //writer.WriteLine();
@@ -164,22 +174,21 @@ namespace CSharpProject
 
                                 PrepareDataForTests(testNumber, alpabetSize, textLength, wordsLength, wordCount, out words, out textes);
 
-                                AhoKorasik simple = new AhoKorasik();
-                                List<bool> simpleAnswers = Test(simple, textes, words);
+                                List<bool> simpleAnswers = Test(false, null, textes, words);
 
-                                AhoKorasik praparable = new AhoKorasik(GetAlphabet(alpabetSize));
-                                List<bool> praparableAnswers = Test(praparable, textes, words);
+                                List<bool> praparableAnswers = Test(false, GetAlphabet(alpabetSize), textes, words);
 
-                                AhoKorasik_Parallel parallel = new AhoKorasik_Parallel();
-                                List<bool> parallelAnswers = Test(parallel, textes, words);
+                                List<bool> parallelAnswers = Test(true, null, textes, words);
 
-                                AhoKorasik_Parallel parallelPreparable = new AhoKorasik_Parallel(GetAlphabet(alpabetSize));
-                                List<bool> parallelPreparableAnswers = Test(parallelPreparable, textes, words);
+                                List<bool> parallelPreparableAnswers = Test(true, GetAlphabet(alpabetSize), textes, words);
 
                                 if (!CheckIfAnswersSame(testNumber, simpleAnswers, praparableAnswers, parallelAnswers, parallelPreparableAnswers))
                                 {
                                     Console.WriteLine("!!!!!!!    Mistake found     !!!!!!!!!");
                                 }
+
+                                Console.ReadKey();
+                                return;
                             }
                         }
                     }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Collections.Concurrent;
 
 namespace CSharpProject
 {
@@ -21,7 +22,7 @@ namespace CSharpProject
             root = new Node_Parallel();
             this.alphabet = alphabet;
             maxWordLength = 0;
-            IsPreparable = alphabet != null;
+            IsPreparable = alphabet != null && alphabet.Count != 0;
         }
 
         #region adding
@@ -89,7 +90,6 @@ namespace CSharpProject
 
                 // prepering suffix transitions
                 foreach (char letter in alphabet)
-                //Parallel.ForEach(alphabet, (char letter) =>
                 {
                     //Console.WriteLine("ForEach    " + Thread.CurrentThread.ManagedThreadId);
 
@@ -105,21 +105,7 @@ namespace CSharpProject
                     {
                         current.Transitions[letter] = current.SuffLink.Transitions[letter];
                     }
-                };//);
-            });
-        }
-
-        private Task<List<Node_Parallel>> GetNextLayer(List<Node_Parallel> layer)
-        {
-            return Task.Run(() =>
-            {
-                List<Node_Parallel> newLayer = new List<Node_Parallel>();
-
-                foreach (Node_Parallel node in layer)
-                {
-                    newLayer.AddRange(node.Sons.Values);
-                }
-                return newLayer;
+                };
             });
         }
 
@@ -137,7 +123,7 @@ namespace CSharpProject
                         t[i] = PrepareTransition(layer[i]);
                     }
 
-                    layer = layer.AsParallel().SelectMany(node => node.Sons.Values).ToList();
+                    layer = layer.SelectMany(node => node.Sons.Values).ToList();
 
                     Task.WaitAll(t);
                 }

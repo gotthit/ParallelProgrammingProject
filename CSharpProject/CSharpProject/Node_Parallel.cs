@@ -34,26 +34,67 @@ namespace CSharpProject
                 Locker = new object();
             }
 
+            private Node_Parallel nonLockedGetTransition(char key)
+            {
+                if (!Transitions.ContainsKey(key))
+                {
+                    if (Sons.ContainsKey(key))
+                    {
+                        Transitions[key] = Sons[key];
+                    }
+                    else if (Parent == null)
+                    {
+                        Transitions[key] = this;
+                    }
+                    else
+                    {
+                        Transitions[key] = nonLockedGetSuffLink().GetTransition(key);
+                    }
+                }
+                return Transitions[key];
+            }
+
+            private Node_Parallel nonLockedGetSuffLink()
+            {
+                if (SuffLink == null)
+                {
+                    if (Parent == null)
+                    {
+                        SuffLink = this;
+                    }
+                    else if (Parent.Parent == null)
+                    {
+                        SuffLink = Parent;
+                    }
+                    else
+                    {
+                        SuffLink = Parent.GetSuffLink().GetTransition(CharToParent);
+                    }
+                }
+                return SuffLink;
+            }
+
+            private Node_Parallel nonLockedGetPressedSuffixLink()
+            {
+                if (PressedSuffixLink == null)
+                {
+                    if (nonLockedGetSuffLink().IsTerminal || nonLockedGetSuffLink().Parent == null)
+                    {
+                        PressedSuffixLink = nonLockedGetSuffLink();
+                    }
+                    else
+                    {
+                        PressedSuffixLink = nonLockedGetSuffLink().GetPressedSuffixLink();
+                    }
+                }
+                return PressedSuffixLink;
+            }
+
             public Node_Parallel GetTransition(char key)
             {
                 lock (Locker)
                 {
-                    if (!Transitions.ContainsKey(key))
-                    {
-                        if (Sons.ContainsKey(key))
-                        {
-                            Transitions[key] = Sons[key];
-                        }
-                        else if (Parent == null)
-                        {
-                            Transitions[key] = this;
-                        }
-                        else
-                        {
-                            Transitions[key] = GetSuffLink().GetTransition(key);
-                        }
-                    }
-                    return Transitions[key];
+                    return nonLockedGetTransition(key);
                 }
             }
 
@@ -61,22 +102,7 @@ namespace CSharpProject
             {
                 lock (Locker)
                 {
-                    if (SuffLink == null)
-                    {
-                        if (Parent == null)
-                        {
-                            SuffLink = this;
-                        }
-                        else if (Parent.Parent == null)
-                        {
-                            SuffLink = Parent;
-                        }
-                        else
-                        {
-                            SuffLink = Parent.GetSuffLink().GetTransition(CharToParent);
-                        }
-                    }
-                    return SuffLink;
+                    return nonLockedGetSuffLink();
                 }
             }
 
@@ -84,18 +110,7 @@ namespace CSharpProject
             {
                 lock (Locker)
                 {
-                    if (PressedSuffixLink == null)
-                    {
-                        if (GetSuffLink().IsTerminal || GetSuffLink().Parent == null)
-                        {
-                            PressedSuffixLink = GetSuffLink();
-                        }
-                        else
-                        {
-                            PressedSuffixLink = GetSuffLink().GetPressedSuffixLink();
-                        }
-                    }
-                    return PressedSuffixLink;
+                    return nonLockedGetPressedSuffixLink();
                 }
             }
         }

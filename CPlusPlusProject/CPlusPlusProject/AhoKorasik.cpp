@@ -6,10 +6,10 @@
 #include "Node.h"
 #include "AhoKorasik.h"
 
-AhoKorasik::AhoKorasik(std::vector<char> alphabet = std::vector<char>())
+AhoKorasik::AhoKorasik(std::vector<char> alphabet)
 {
-    root = AddNode();
-    if (!alphabet.empty)
+    root = new Node();
+    if (!alphabet.empty())
     {
         this->alphabet = alphabet;
         IsPreparable = true;
@@ -20,85 +20,28 @@ AhoKorasik::AhoKorasik(std::vector<char> alphabet = std::vector<char>())
     }
 }
 
-int AhoKorasik::AddNode(int parent = -1, char charToParent = (char)0)
+void AhoKorasik::Clear()
 {
-    memory.push_back(Node(parent, charToParent));
-    return memory.size() - 1;
-}
-
-int AhoKorasik::GetTransition(int adress, char key)
-{
-    if (memory[adress].Transitions.find(key) == memory[adress].Transitions.end())
-    {
-        if (memory[adress].Sons.find(key) != memory[adress].Sons.end())
-        {
-            memory[adress].Transitions[key] = memory[adress].Sons[key];
-        }
-        else if (memory[adress].Parent == -1)
-        {
-            memory[adress].Transitions[key] = adress;
-        }
-        else
-        {
-            memory[adress].Transitions[key] = GetTransition(GetSuffLink(adress), key);
-        }
-    }
-    return memory[adress].Transitions[key];
-}
-
-int AhoKorasik::GetSuffLink(int adress)
-{
-    if (memory[adress].SuffLink == -1)
-    {
-        if (adress == root || memory[adress].Parent == root)
-        {
-            memory[adress].SuffLink = root;
-        }
-        else
-        {
-            memory[adress].SuffLink = GetTransition(GetSuffLink(memory[adress].Parent), memory[adress].CharToParent);
-        }
-    }
-    return memory[adress].SuffLink;
-}
-
-int AhoKorasik::GetPressedSuffixLink(int adress)
-{
-    if (memory[adress].PressedSuffixLink == -1)
-    {
-        if (memory[GetSuffLink(adress)].IsTerminal || memory[GetSuffLink(adress)].Parent == -1)
-        {
-            memory[adress].PressedSuffixLink = GetSuffLink(adress);
-        }
-        else
-        {
-            memory[adress].PressedSuffixLink = GetPressedSuffixLink(GetSuffLink(adress));
-        }
-    }
-    return memory[adress].PressedSuffixLink;
-}
-
-
-void AhoKorasik::AddString(std::string str)
-{
-    int current = root;
-
-    for (int i = 0; i < str.size(); ++i)
-    {
-        if (memory[current].Sons.find(str[i]) == memory[current].Sons.end())
-        {
-            memory[current].Sons[str[i]] = AddNode(current, str[i]);
-        }
-        current = memory[current].Sons[str[i]];
-    }
-    memory[current].IsTerminal = true;
+    alphabet.clear();
+    delete root;
 }
 
 void AhoKorasik::AddStrings(std::vector<std::string> strings)
 {
     for (int i = 0; i < strings.size(); ++i)
     {
-        AddString(strings[i]);
+        std::string str = strings[i];
+        Node* current = root;
+
+        for (int i = 0; i < str.size(); ++i)
+        {
+            if (current->Sons.find(str[i]) == current->Sons.end())
+            {
+                current->Sons[str[i]] = new Node(current, str[i]);
+            }
+            current = current->Sons[str[i]];
+        }
+        current->IsTerminal = true;
     }
 }
 
@@ -106,32 +49,32 @@ void AhoKorasik::PrepareTransitions()
 {
     if (IsPreparable)
     {
-        std::queue<int> queue;
+        std::queue<Node*> queue;
         queue.push(root);
 
         while (!queue.empty())
         {
-            int current = queue.front();
+            Node* current = queue.front();
             queue.pop();
 
             // prepering suffix link
-            if (current == root || memory[current].Parent == root)
+            if (current == root || current->Parent == root)
             {
-                memory[current].SuffLink = root;
+                current->SuffLink = root;
             }
             else
             {
-                memory[current].SuffLink = memory[memory[memory[current].Parent].SuffLink].Transitions[memory[current].CharToParent];
+                current->SuffLink = current->Parent->SuffLink->Transitions[current->CharToParent];
             }
 
             // preparing pressed suffix link
-            if (memory[memory[current].SuffLink].IsTerminal || memory[current].SuffLink == root)
+            if (current->SuffLink->IsTerminal || current->SuffLink == root)
             {
-                memory[current].PressedSuffixLink = memory[current].SuffLink;
+                current->PressedSuffixLink = current->SuffLink;
             }
             else
             {
-                memory[current].PressedSuffixLink = memory[memory[current].SuffLink].PressedSuffixLink;
+                current->PressedSuffixLink = current->SuffLink->PressedSuffixLink;
             }
 
             // prepering suffix transitions
@@ -139,21 +82,21 @@ void AhoKorasik::PrepareTransitions()
             {
                 char letter = alphabet[i];
 
-                if (memory[current].Sons.find(letter) != memory[current].Sons.end())
+                if (current->Sons.find(letter) != current->Sons.end())
                 {
-                    memory[current].Transitions[letter] = memory[current].Sons[letter];
+                    current->Transitions[letter] = current->Sons[letter];
                 }
                 else if (current == root)
                 {
-                    memory[current].Transitions[letter] = current;
+                    current->Transitions[letter] = current;
                 }
                 else
                 {
-                    memory[current].Transitions[letter] = memory[memory[current].SuffLink].Transitions[letter];
+                    current->Transitions[letter] = current->SuffLink->Transitions[letter];
                 }
             }
 
-            for (auto it = memory[current].Sons.begin(); it != memory[current].Sons.end(); ++it)
+            for (auto it = current->Sons.begin(); it != current->Sons.end(); ++it)
             {
                 queue.push(it->second);
             }
@@ -163,11 +106,11 @@ void AhoKorasik::PrepareTransitions()
 
 bool AhoKorasik::IsOneOfStringsInText(std::string text)
 {
-    int current = root;
+    Node* current = root;
     for (int i = 0; i < text.size(); ++i)
     {
-        current = GetTransition(current, text[i]);
-        if (memory[current].IsTerminal || GetPressedSuffixLink(current) != root)
+        current = current->GetTransition(text[i]);
+        if (current->IsTerminal || current->GetPressedSuffixLink() != root)
         {
             return true;
         }
@@ -177,11 +120,11 @@ bool AhoKorasik::IsOneOfStringsInText(std::string text)
 
 bool AhoKorasik::IsOneOfStringsInText_Prepared(std::string text)
 {
-    int current = root;
+    Node* current = root;
     for (int i = 0; i < text.size(); ++i)
     {
-        current = memory[current].Transitions[text[i]];
-        if (memory[current].IsTerminal || memory[current].PressedSuffixLink != root)
+        current = current->Transitions[text[i]];
+        if (current->IsTerminal || current->PressedSuffixLink != root)
         {
             return true;
         }
