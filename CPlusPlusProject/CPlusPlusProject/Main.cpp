@@ -140,7 +140,7 @@ int main()
     #endif
 
 
-    const int testNumber = 1;
+    const int testNumber = 10;
 
     for (int alpabetSize = 26; alpabetSize < 1000; alpabetSize *= 10)
     {
