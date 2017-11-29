@@ -146,9 +146,9 @@ int main()
     {
         for (int textLength = 10000000; textLength <= 10000000; textLength *= 10)
         {
-            for (int wordsLength = 50; wordsLength <= textLength; wordsLength *= 10)
+            for (int wordsLength = 1000; wordsLength <= textLength; wordsLength *= 10)
             {
-                for (int wordCount = 10000; (wordsLength * wordCount) <= 1000000; wordCount *= 10)
+                for (int wordCount = 50; (wordsLength * wordCount) <= 1000000; wordCount *= 10)
                 {
                     std::cout << std::endl << std::endl << " alpabetSize: " << alpabetSize 
                                                         << "  |  textLength: " << textLength

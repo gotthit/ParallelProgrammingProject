@@ -48,16 +48,16 @@ void AhoKorasik_Parallel::AddStrings(std::vector<std::string> strings)
 
         Node* current = root;
 
-        for (int i = 0; i < str.size(); ++i)
+        for (int j = 0; j < str.size(); ++j)
         {
             omp_lock_t * Locker = &(current->Locker); // start critical
             omp_set_lock(Locker);
 
-            if (current->Sons.find(str[i]) == current->Sons.end())
+            if (current->Sons.find(str[j]) == current->Sons.end())
             {
-                current->Sons[str[i]] = new Node(current, str[i]);
+                current->Sons[str[j]] = new Node(current, str[j]);
             }
-            current = current->Sons[str[i]];
+            current = current->Sons[str[j]];
 
             omp_unset_lock(Locker);                   // end critical
         }

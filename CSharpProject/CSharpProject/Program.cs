@@ -144,15 +144,15 @@ namespace CSharpProject
 
         static void Main(string[] args)
         {
-            const int testNumber = 1;
+            const int testNumber = 4;
 
             for (int alpabetSize = 26; alpabetSize < 1000; alpabetSize *= 10)
             {
-                for (int textLength = 1000000; textLength <= 100000000; textLength *= 10)
+                for (int textLength = 10000000; textLength <= 100000000; textLength *= 10)
                 {
-                    for (int wordsLength = 50; wordsLength <= textLength; wordsLength *= 10)
+                    for (int wordsLength = 1000; wordsLength <= textLength; wordsLength *= 10)
                     {
-                        for (int wordCount = 10000; (wordsLength * wordCount) <= 1000000; wordCount *= 10)
+                        for (int wordCount = 50; (wordsLength * wordCount) <= 1000000; wordCount *= 10)
                         {
                             Console.WriteLine();
                             Console.WriteLine(" ----------- ");
